@@ -36,7 +36,7 @@
             float: left;
         }
         .col2 {
-            margin-left: 55%;
+            margin-left: 53%;
             height: 200px;
         }
     
@@ -98,20 +98,29 @@
                   </ul>
                   <div id="mortal">
                     <h2>Mortal</h2>
+                    
+                    <button id="mortalButton">Generate</button>
+                    
                   </div>
                   <div id="vampire">
                     <h2>Vampire</h2>
+                    
+                    <button id="vtrButton">Generate</button>
                   </div>
                   <div id="werewolf">
                     <h2>Werewolf</h2>
+                    
+                    <button id="wtfButton">Generate</button>
                   </div>
                   <div id="mage">
                     <h2>Mage</h2>
+                    
+                    <button id="mtaButton">Generate</button>
                   </div>
                   <div id="changeling">
                     <h2>Changeling</h2>
                     
-                    <input type="checkbox" id="includeHomebrew"/> Include Homebrew
+                    <input type="checkbox" id="includeCTLHomebrew"/> Include Homebrew
                     
                     <div id="checkboxList">
                         <label>Court Options:</label>
@@ -129,9 +138,13 @@
                   </div>
                   <div id="hunter">
                     <h2>Hunter</h2>
+                    
+                    <button id="htvButton">Generate</button>
                   </div>
                   <div id="genius">
                     <h2>Genius</h2>
+                    
+                    <button id="gttButton">Generate</button>
                   </div>
                   <div id="princess">
                     <img src="http://i3.kym-cdn.com/photos/images/facebook/000/926/954/795.png" style="width: 100%;">
@@ -185,18 +198,106 @@
             name = getName();
             output = output + "<b>Name:</b> " + name + "<br>";
             
+            //MORTAL SPECIFIC STUFF HERE
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
+            
         }
         
         function vampire() {
+
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //VAMPIRE SPECIFIC STUFF HERE
+            clans = ["Daeva","Gangrel","Mekhet","Nosferatu","Ventrue"];
+            clan = clans[Math.floor(Math.random()*clans.length)];
+            output = output + "<b>Clan:</b> " + clan + "<br>";
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
+            
         
         }
         
         function werewolf() {
         
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //WEREWOOF SPECIFIC STUFF HERE
+            auspices = ["Rahu","Cahalith","Elodoth","Ithaeur","Irraka"];
+            auspice = auspices[Math.floor(Math.random()*auspices.length)];
+            output = output + "<b>Auspice:</b> " + auspice + "<br>";
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
         }
         
         function mage() {
         
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //MAGE SPECIFIC STUFF HERE
+            paths = ["Acanthus", "Mastigos", "Moros", "Obrimos", "Thyrsus", "The Unknown Tower"];
+            path = paths[Math.floor(Math.random()*paths.length)];
+            output = output + "<b>Path:</b> " + path + "<br>";
+            
+            orders = ["Adamantine Arrow", "Free Council", "Guardians of the Veil", "Mysterium", "Silver Ladder", "Seers of the Throne", "Banishers", "The Mad", "Apostate"];
+            order = orders[Math.floor(Math.random()*orders.length)];
+            output = output + "<b>Order:</b> " + order + "<br>";
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
         }
         
         function changeling() {
@@ -218,7 +319,8 @@
             kiths = Object.keys(changelings[seeming]);
             kith = kiths[Math.floor(Math.random()*kiths.length)];
             
-            if(!$("#includeHomebrew").is(':checked')) {
+            //TODO: this is bad and should be fixed
+            if(!$("#includeCTLHomebrew").is(':checked')) {
                 while (kith.search("(hb)") != -1) {
                      kith = kiths[Math.floor(Math.random()*kiths.length)];
                 }
@@ -251,8 +353,8 @@
             output = output + "<b>Court:</b> " + court + "<br>";
             
             //pick a specialty
-            specialities = ["Mental","Physical","Social"];
-            specialty = specialities[Math.floor(Math.random()*specialities.length)];
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
             output = output + "<b>Specialty:</b> " + specialty + "<br>";
             
             //pick a rank
@@ -295,15 +397,66 @@
         
         function hunter() {
         
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //HUNTER SPECIFIC STUFF HERE
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
+        
         }
         
         function genius() {
+        
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //GENIUS SPECIFIC STUFF HERE
+            catalysts = ["Grimm","Hoffnung","Klagen","Neid","Staunen"];
+            catalyst = catalysts[Math.floor(Math.random()*catalysts.length)];
+            output = output + "<b>Catalyst:</b> " + catalyst + "<br>";
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>";
+            
+            $("#result").html(output);
         
         }
         
         $(document).ready(function(){ 
         
+            $("#mortalButton").click(function(){ mortal(); });
+            $("#vtrButton").click(function(){ vampire(); });
+            $("#wtfButton").click(function(){ werewolf(); });
+            $("#mtaButton").click(function(){ mage(); }); 
             $("#ctlButton").click(function(){ changeling(); }); 
+            $("#htvButton").click(function(){ hunter(); });
+            $("#gttButton").click(function(){ genius(); }); 
             
             
         });
