@@ -1,0 +1,253 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Tabs - Vertical Tabs functionality</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    
+    <!-- data -->
+    <script type="text/javascript" src="changelingtraits.js"></script> 
+    <script type="text/javascript" src="names.js"></script> 
+    
+    <style>
+    
+        .container {
+            width: 95%;
+            margin: auto;
+        }
+        .col1 {
+            width: 50%;
+            float: left;
+        }
+        .col2 {
+            margin-left: 55%;
+            height: 200px;
+        }
+    
+        .ui-dialog { font-size: .9em; }
+        #kithDescription { display: none; }
+        .ui-tabs-vertical { width: 100%;}
+        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; min-width: 10%; max-width: 25%; }
+        .ui-tabs-vertical .ui-tabs-nav li { font-size: .9em; clear: left; width: 100%; border-bottom-width: 1px; border-right-width: 0; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+        .ui-tabs-vertical .ui-tabs-panel { margin-left: 25%; padding: 1em; padding-top: 1%;}
+        
+        /* General Settings Styles */
+        #checkboxList {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        
+        #checkboxList ul {
+          margin: 0;
+          list-style: none;
+        }
+        
+        
+    </style>
+</head>
+<body>
+ 
+<h1>NWoD Quick NPC Generator</h1>
+ 
+    <div class="container">
+        <div class="col1">
+            <div id="tabs">
+                  <ul>
+                    <li><a href="#tabs-1">Mortal</a></li>
+                    <li><a href="#tabs-2">Vampire</a></li>
+                    <li><a href="#tabs-3">Werewolf</a></li>
+                    <li><a href="#tabs-4">Mage</a></li>
+                    <li><a href="#tabs-5">Changeling</a></li>
+                    <li><a href="#tabs-6">Hunter</a></li>
+                    <li><a href="#tabs-7">Genius</a></li>
+                    <li><a href="#tabs-8">Princess</a></li>
+                  </ul>
+                  <div id="tabs-1">
+                    <h2>Mortal</h2>
+                  </div>
+                  <div id="tabs-2">
+                    <h2>Vampire</h2>
+                  </div>
+                  <div id="tabs-3">
+                    <h2>Werewolf</h2>
+                  </div>
+                  <div id="tabs-4">
+                    <h2>Mage</h2>
+                  </div>
+                  <div id="tabs-5">
+                    <h2>Changeling</h2>
+                    
+                    <input type="checkbox" id="includeHomebrew"/> Include Homebrew
+                    
+                    <div id="checkboxList">
+                        <label>Court Options:</label>
+                        <ul>
+                            <li><input type="checkbox" id="includeSeasonalCourts"/> Seasonal</li>
+                            <li><input type="checkbox" id="includeDirectionalCourts"/> Directional</li>
+                            <li><input type="checkbox" id="includeDayNightCourts"/> Day/Night</li>
+                            <li><input type="checkbox" id="includeTransitionalCourts"/> Transitional</li>
+                            <li><input type="checkbox" id="includeCourtless"/> Courtless</li>
+                        </ul>
+                    </div>
+                    
+                    <button id="ctlButton">Generate</button>
+                    
+                  </div>
+                  <div id="tabs-6">
+                    <h2>Hunter</h2>
+                  </div>
+                  <div id="tabs-7">
+                    <h2>Genius</h2>
+                  </div>
+                  <div id="tabs-8">
+                    <img src="http://i3.kym-cdn.com/photos/images/facebook/000/926/954/795.png" style="width: 100%;">
+                  </div>
+            </div>
+        </div>
+        
+        
+        <div class="col2">
+        <div id="result">
+        
+        </div>
+        </div>
+        </div>
+ 
+</body>
+
+<script>
+        $( function() {
+            $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+            $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+             
+            
+        } );
+        
+        function getRank() {
+            return Math.floor(Math.random()*5);
+        }
+        
+        function getName() {
+            return firstNames[Math.floor(Math.random()*firstNames.length)];
+        }
+        
+        function mortal() {
+            
+            
+        }
+        
+        function vampire() {
+        
+        }
+        
+        function werewolf() {
+        
+        }
+        
+        function mage() {
+        
+        }
+        
+        function changeling() {
+        
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
+            
+            //pick a seeming
+            seemings = Object.keys(changelings);
+            seeming = seemings[Math.floor(Math.random()*seemings.length)];
+            output = output + "<b>Seeming:</b> " + seeming + "<br>";
+
+            //pick a kith
+            kiths = Object.keys(changelings[seeming]);
+            kith = kiths[Math.floor(Math.random()*kiths.length)];
+            
+            if(!$("#includeHomebrew").is(':checked')) {
+                while (kith.search("(hb)") != -1) {
+                     kith = kiths[Math.floor(Math.random()*kiths.length)];
+                }
+            }
+            
+            output = output + "<b>Kith:</b> " + kith + " <a href='#' id='kithDefine'>?</a> <br>"
+            
+            kithDescription = changelings[seeming][kith];
+            output = output + "<div id='kithDescription' title='" + kith + "'>" + kithDescription + "</div>"
+
+            //pick a court
+            courts = [];
+            if($("#includeSeasonalCourts").is(':checked'))
+                courts.push("Autumn","Spring","Summer","Winter");
+            if($("#includeDirectionalCourts").is(':checked'))
+                courts.push("North","East","South","West");
+            if($("#includeDayNightCourts").is(':checked'))
+                courts.push("Sun","Moon");
+            if($("#includeTransitionalCourts").is(':checked'))
+                courts.push("Dawn","Dusk");
+            if($("#includeCourtless").is(':checked'))
+                courts.push("Courtless");
+                
+            //in case someone decides not to pick anything    
+            //lowkey hate how ugly this is, javascript why    
+
+            
+            court = courts[Math.floor(Math.random()*courts.length)];
+            if(typeof court === "undefined")
+                court = "";
+            output = output + "<b>Court:</b> " + court + "<br>"
+            
+            //pick a speciality
+            specialities = ["Mental","Physical","Social"];
+            speciality = specialities[Math.floor(Math.random()*specialities.length)];
+            output = output + "<b>Specialty:</b> " + speciality + "<br>"
+            
+            $("#result").html(output);
+            
+            $( "#kithDefine" ).click(function() {
+                $( "#kithDescription" ).dialog({
+                  modal: true,
+                  width: 'auto',
+                  create: function( event, ui ) {
+                    // Set maxWidth
+                    $(this).css("maxWidth", "400px");
+                    },
+                  show: {
+                    effect: "blind",
+                    duration: 1000
+                  },
+                  hide: {
+                    effect: "blind",
+                    duration: 1000
+                    }
+                });
+                $( "#kithDescription" ).dialog( "open" );
+            });
+            
+        }
+        
+        function hunter() {
+        
+        }
+        
+        function genius() {
+        
+        }
+        
+        $(document).ready(function(){ 
+        
+            $("#ctlButton").click(function(){ changeling(); }); 
+            
+            
+        });
+        
+    </script>
+
+</html>
