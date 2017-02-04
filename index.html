@@ -8,89 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     
     <!-- data -->
-    <script type="text/javascript" src="changelingtraits.js"></script> 
+    <script type="text/javascript" src="changelingtraits.js"></script>
+    <script type="text/javascript" src="personality.js"></script> 
     <script type="text/javascript" src="names.js"></script> 
     
-    <style>
-    
-        body {
-            font-family: 'Verdana', sans-serif;
-            font-size: 1em;
-        }
-        
-        a {
-            text-decoration: none;
-            color: #009ACD;
-        }
-        
-        a:hover {
-            color: #00688B;
-        }
-    
-        .container {
-            width: 100%;
-            margin: auto;
-        }
-        .col1 {
-            width: 50%;
-            float: left;
-        }
-        
-        .col2 {
-            margin-left: 53%;
-            height: 200px;
-            
-        }
-        
-        .container:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        
-        .footer {
-            font-size: .7em;
-            margin-top: 1%;
-        }
-    
-        .ui-dialog { font-size: .9em; }
-        #kithDescription { display: none; }
-        
-        #result {
-            margin-bottom: 1em;
-        }
-        
-        #toggleTextareaButton {
-            display: block;
-            font-size: .9em;
-        }
-        
-        #resultTextarea {
-            display: none;
-            width: 100%;
-            height: 5em;
-        }
-        
-        .ui-tabs-vertical { width: 100%;}
-        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; min-width: 20%; max-width: 25%; }
-        .ui-tabs-vertical .ui-tabs-nav li { font-size: .9em; clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0;  }
-        .ui-tabs-vertical .ui-tabs-nav li a { display: block; }
-        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { margin-bottom: 2px; padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-        .ui-tabs-vertical .ui-tabs-panel { margin-left: 25%; padding: .5em; padding-top: 1%;}
-        
-        /* General Settings Styles */
-        #checkboxList {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-        
-        #checkboxList ul {
-          margin: 0;
-          list-style: none;
-        }
-        
-        
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
  
@@ -197,12 +119,97 @@
             
         } );
         
+        //put a number between 1 and 5 to represent the npc's rank
         function getRank() {
             return Math.floor(Math.random()*5) + 1;
         }
         
+        //return a name comprised of a first + last name
         function getName() {
             return firstNames[Math.floor(Math.random()*firstNames.length)] + " " + lastNames[Math.floor(Math.random()*lastNames.length)] ;
+        }
+        
+        //return string of 3 random personality traits
+        function getPersonality() {
+        
+            personality = [];
+        
+            for (i = 0; i < 3; i++) {
+            
+                trait = personalityTraits[Math.floor(Math.random()*personalityTraits.length)];
+            
+                while(personality.includes(trait)) {
+                    trait = personalityTraits[Math.floor(Math.random()*personalityTraits.length)];
+                }
+                
+                personality.push(trait);
+            
+            }
+        
+            return personality[0] + ", " + personality[1] + ", " + personality[2];
+        }
+        
+        //returns some json with values that apply to every splat
+        function getBasicStats(template) {
+        
+            npc = {};
+        
+            //pick a name
+            name = getName();
+            npc["Name"] = { 'value' : name, 'define' : false };
+            
+            //pick a template
+            npc["Template"] = { 'value' : template, 'define' : false };
+            
+            //pick a specialty
+            specialties = ["Mental","Physical","Social"];
+            specialty = specialties[Math.floor(Math.random()*specialties.length)];
+            npc["Specialty"] = { 'value' : specialty, 'define' : false };
+            
+            //pick a rank
+            rank = getRank();
+            npc["Rank"] = { 'value' : rank, 'define' : false };
+            
+            //pick a personality
+            personality = getPersonality();
+            npc["Personality"] = { 'value' : personality, 'define' : false };
+            
+            return npc;
+        
+        }
+        
+        function generateHTML(npc) {
+        
+            npchtml = "";
+            
+            for (var key in npc) {
+                
+                if(npc[key]['define'] == true) {
+                    //if the value has a definition set we need to make sure it'll make a popup thingy
+                    
+                } else {
+                
+                    npchtml = npchtml.concat("<b>" + key + ":</b> " + npc[key]['value'] + "<br>");
+                
+                }
+            }
+            
+            return npchtml;
+        
+        }
+        
+        function generatePlainText(npc) {
+        
+            plaintext = "";
+            
+            for (var key in npc) {
+            
+                plaintext = plaintext.concat(key + ": " + npc[key]['value'] + "\n");
+            
+            }
+        
+            return plaintext;
+        
         }
         
         function mortal() {
@@ -211,27 +218,16 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Mortal");
             
             //MORTAL SPECIFIC STUFF HERE
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
+            output = generateHTML(npc);
             
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
+            plaintext = generatePlainText(npc);
                 
             $("textarea#resultTextarea").html(plaintext);
             
@@ -243,32 +239,18 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Vampire");
             
             //VAMPIRE SPECIFIC STUFF HERE
             clans = ["Daeva","Gangrel","Mekhet","Nosferatu","Ventrue"];
             clan = clans[Math.floor(Math.random()*clans.length)];
-            output = output + "<b>Clan:</b> " + clan + "<br>";
+            npc['Clan'] = { 'value' : clan, 'define' : false };
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
-            
+            output = generateHTML(npc);
             $("#result").html(output);
-
+            
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Clan: " + clan + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
-                
+            plaintext = generatePlainText(npc);
             $("textarea#resultTextarea").html(plaintext);
         
         }
@@ -279,32 +261,18 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Werewolf");
             
             //WEREWOOF SPECIFIC STUFF HERE
             auspices = ["Rahu","Cahalith","Elodoth","Ithaeur","Irraka"];
             auspice = auspices[Math.floor(Math.random()*auspices.length)];
-            output = output + "<b>Auspice:</b> " + auspice + "<br>";
+            npc['Auspice'] = { 'value' : auspice, 'define' : false };
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
-            
+            output = generateHTML(npc);
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Auspice: " + auspice + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
-                
+            plaintext = generatePlainText(npc);
             $("textarea#resultTextarea").html(plaintext);
             
         }
@@ -315,38 +283,24 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Mage");
             
             //MAGE SPECIFIC STUFF HERE
             paths = ["Acanthus", "Mastigos", "Moros", "Obrimos", "Thyrsus", "The Unknown Tower"];
             path = paths[Math.floor(Math.random()*paths.length)];
-            output = output + "<b>Path:</b> " + path + "<br>";
+            npc['Path'] = { 'value' : path, 'define' : false };
             
             orders = ["Adamantine Arrow", "Free Council", "Guardians of the Veil", "Mysterium", "Silver Ladder", "Seers of the Throne", "Banishers", "The Mad", "Apostate"];
             order = orders[Math.floor(Math.random()*orders.length)];
-            output = output + "<b>Order:</b> " + order + "<br>";
+            npc['Order'] = { 'value' : order, 'define' : false };
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
-            
+            output = generateHTML(npc);
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Path: " + path + "\n" +
-                "Order: " + order + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
-                
+            plaintext = generatePlainText(npc);
             $("textarea#resultTextarea").html(plaintext);
+
         }
         
         function changeling() {
@@ -450,27 +404,16 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Hunter");
             
             //HUNTER SPECIFIC STUFF HERE
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
+            output = generateHTML(npc);
             
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
+            plaintext = generatePlainText(npc);
                 
             $("textarea#resultTextarea").html(plaintext);
         
@@ -482,32 +425,18 @@
             output = "";
             $("#result").html(output);
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
+            npc = getBasicStats("Genius");
             
             //GENIUS SPECIFIC STUFF HERE
             catalysts = ["Grimm","Hoffnung","Klagen","Neid","Staunen"];
             catalyst = catalysts[Math.floor(Math.random()*catalysts.length)];
-            output = output + "<b>Catalyst:</b> " + catalyst + "<br>";
+            npc['Catalyst'] = { 'value' : catalyst, 'define' : false };
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
-            
+            output = generateHTML(npc);
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Catalyst: " + catalyst + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
-                
+            plaintext = generatePlainText(npc);
             $("textarea#resultTextarea").html(plaintext);
         
         }
