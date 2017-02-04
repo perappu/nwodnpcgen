@@ -13,6 +13,11 @@
     
     <style>
     
+        body {
+            font-family: 'Verdana', sans-serif;
+            font-size: 1em;
+        }
+        
         a {
             text-decoration: none;
             color: #009ACD;
@@ -38,7 +43,20 @@
         .ui-dialog { font-size: .9em; }
         #kithDescription { display: none; }
         
-          
+        #result {
+            margin-bottom: 1em;
+        }
+        
+        #toggleTextareaButton {
+            display: block;
+            font-size: .9em;
+        }
+        
+        #resultTextarea {
+            display: none;
+            width: 100%;
+            height: 5em;
+        }
         
         .ui-tabs-vertical { width: 100%;}
         .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; min-width: 20%; max-width: 25%; }
@@ -126,8 +144,15 @@
         <div id="result">
         Press a generate button to make stuff appear here!
         </div>
+        
+        <div id="resultCopyable">
+            <button id="toggleTextareaButton">Plaintext</button>
+            <textarea id="resultTextarea">Press a generate button to make stuff appear here!</textarea>
+        
         </div>
+        
         </div>
+        
  
 </body>
 
@@ -136,6 +161,9 @@
             $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
             $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
              
+            $("#toggleTextareaButton").click(function(){
+                $("#resultTextarea").slideToggle();
+            });
             
         } );
         
@@ -233,6 +261,7 @@
             output = output + "<b>Rank:</b> " + rank + "<br>"
             
             $("#result").html(output);
+            $("#resultTextarea").text(output);
             
             $( "#kithDefine" ).click(function() {
                 $( "#kithDescription" ).dialog({
