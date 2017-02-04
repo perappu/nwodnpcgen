@@ -224,10 +224,10 @@
                 }
             }
             
-            output = output + "<b>Kith:</b> " + kith + " <a href='#' id='kithDefine'>?</a> <br>"
+            output = output + "<b>Kith:</b> " + kith + " <a href='#' id='kithDefine'>?</a> <br>";
             
             kithDescription = changelings[seeming][kith];
-            output = output + "<div id='kithDescription' title='" + kith + "'>" + kithDescription + "</div>"
+            output = output + "<div id='kithDescription' title='" + kith + "'>" + kithDescription + "</div>";
 
             //pick a court
             courts = [];
@@ -244,24 +244,32 @@
                 
             //in case someone decides not to pick anything    
             //lowkey hate how ugly this is, javascript why    
-
             
             court = courts[Math.floor(Math.random()*courts.length)];
             if(typeof court === "undefined")
                 court = "";
-            output = output + "<b>Court:</b> " + court + "<br>"
+            output = output + "<b>Court:</b> " + court + "<br>";
             
-            //pick a speciality
+            //pick a specialty
             specialities = ["Mental","Physical","Social"];
-            speciality = specialities[Math.floor(Math.random()*specialities.length)];
-            output = output + "<b>Specialty:</b> " + speciality + "<br>"
+            specialty = specialities[Math.floor(Math.random()*specialities.length)];
+            output = output + "<b>Specialty:</b> " + specialty + "<br>";
             
             //pick a rank
             rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>"
+            output = output + "<b>Rank:</b> " + rank + "<br>";
             
             $("#result").html(output);
-            $("#resultTextarea").text(output);
+            
+            //copyable option
+            plaintext = "Name: " + name + "\n" +
+                "Seeming: " + seeming + "\n" +
+                "Kith: " + kith + "\n" +
+                "Court: " + court + "\n" +
+                "Specialty: " + specialty + "\n" +
+                "Rank: " + rank;
+                
+            $("textarea#resultTextarea").html(plaintext);
             
             $( "#kithDefine" ).click(function() {
                 $( "#kithDescription" ).dialog({
