@@ -14,7 +14,12 @@
     <style>
     
         a {
-            font-decoration: none;
+            text-decoration: none;
+            color: #009ACD;
+        }
+        
+        a:hover {
+            color: #00688B;
         }
     
         .container {
@@ -119,7 +124,7 @@
         
         <div class="col2">
         <div id="result">
-        
+        Press a generate button to make stuff appear here!
         </div>
         </div>
         </div>
@@ -135,7 +140,7 @@
         } );
         
         function getRank() {
-            return Math.floor(Math.random()*5);
+            return Math.floor(Math.random()*5) + 1;
         }
         
         function getName() {
@@ -144,6 +149,13 @@
         
         function mortal() {
             
+            //clear previous results
+            output = "";
+            $("#result").html(output);
+            
+            //pick a name
+            name = getName();
+            output = output + "<b>Name:</b> " + name + "<br>";
             
         }
         
@@ -215,6 +227,10 @@
             specialities = ["Mental","Physical","Social"];
             speciality = specialities[Math.floor(Math.random()*specialities.length)];
             output = output + "<b>Specialty:</b> " + speciality + "<br>"
+            
+            //pick a rank
+            rank = getRank();
+            output = output + "<b>Rank:</b> " + rank + "<br>"
             
             $("#result").html(output);
             
