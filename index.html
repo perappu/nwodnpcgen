@@ -8,6 +8,7 @@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     
     <!-- data -->
+    <script type="text/javascript" src="mortaltraits.js"></script>
     <script type="text/javascript" src="changelingtraits.js"></script>
     <script type="text/javascript" src="huntertraits.js"></script>
     <script type="text/javascript" src="personality.js"></script> 
@@ -27,8 +28,12 @@
                     <li><a href="#vampire">Vampire</a></li>
                     <li><a href="#werewolf">Werewolf</a></li>
                     <li><a href="#mage">Mage</a></li>
+                    <li><a href="#promethean">Promethean</a></li>
                     <li><a href="#changeling">Changeling</a></li>
                     <li><a href="#hunter">Hunter</a></li>
+                    <li><a href="#geist">Geist</a></li>
+                    <li><a href="#demon">Demon</a></li>
+                    <li><a href="#beast">Beast</a></li>
                     <li><a href="#genius">Genius</a></li>
                     <li><a href="#princess">Princess</a></li>
                   </ul>
@@ -81,6 +86,21 @@
                     <br><br>
                     <button id="htvButton">Generate</button>
                   </div>
+                  <div id="geist">
+                    <h2>Geist</h2>
+                    
+                    
+                  </div>
+                  <div id="demon">
+                    <h2>Demon</h2>
+                    
+                    
+                  </div>
+                  <div id="beast">
+                    <h2>Beast</h2>
+                    
+                    
+                  </div>
                   <div id="genius">
                     <h2>Genius</h2>
                     
@@ -109,6 +129,8 @@
         
         <div class="footer">
         by <a href="http://twitter.com/stokori">stokori</a> - <a href="https://github.com/stokori/nwodnpcgen">source code</a> - <a href="http://worldofdarkness.wikia.com/wiki/Quick_NPCs_(nWoD)">quick npc reference</a>
+        <br>
+        with great thanks to the <a href="http://whitewolf.wikia.com/wiki/Main_Page">unofficial white wolf wiki</a>
         </div>
  
 </body>
@@ -153,7 +175,6 @@
         
             return traits[0] + ", " + traits[1] + ", " + traits[2];
         }
-        
         
         //returns some json with values that apply to every splat
         function getBasicStats(template) {
@@ -273,6 +294,8 @@
             npc = getBasicStats("Mortal");
             
             //MORTAL SPECIFIC STUFF HERE
+            job = jobs[Math.floor(Math.random()*jobs.length)];
+            npc["Job"] = { 'value' : job, 'define' : false };
             
             output = generateHTML(npc);
             $("#result").html(output);
