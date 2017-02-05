@@ -20,7 +20,7 @@
  
 <h1>NWoD Quick NPC Generator</h1>
  
-    <div class="container">
+    <div class="container" style="display: none;">
         <div class="col1">
             <div id="tabs">
                   <ul>
@@ -37,7 +37,7 @@
                   </ul>
                   <div id="mortal">
                     <h2>Mortal</h2>
-                    <p>aka Boring Human</p>
+                    <p>For when you need someone non-magical.</p>
                     
                     <button id="mortalButton">Generate</button>
                     
@@ -81,7 +81,7 @@
                     
                     <p><input type="checkbox" id="includeHTVHomebrew"/> Include Homebrew</p>
                     <p><input type="checkbox" id="excludeQuestionableHTVContent"/> "Tamer" Results (No Ashwood Abbey, Hunt Club, etc)</p>
-                    <br><br>
+
                     <button id="htvButton">Generate</button>
                   </div>
                   <div id="geist">
@@ -124,8 +124,8 @@
         
         <div class="footer">
         by <a href="http://twitter.com/stokori">stokori</a> - <a href="https://github.com/stokori/nwodnpcgen">source code</a> - <a href="http://worldofdarkness.wikia.com/wiki/Quick_NPCs_(nWoD)">quick npc reference</a>
-        <br>
-        with great thanks to the <a href="http://whitewolf.wikia.com/wiki/Main_Page">unofficial white wolf wiki</a>
+        <br>with great thanks to the <a href="http://whitewolf.wikia.com/wiki/Main_Page">unofficial white wolf wiki</a>
+        <br>if things aren't working, make sure javascript is allowed and you're using the latest version of your chosen browser
         </div>
  
 </body>
@@ -140,11 +140,6 @@
             });
             
         } );
-        
-        //put a number between 1 and 5 to represent the npc's rank
-        function getRank() {
-            return Math.floor(Math.random()*5) + 1;
-        }
         
         //return a name comprised of a first + last name
         function getName() {
@@ -188,8 +183,8 @@
             specialty = specialties[Math.floor(Math.random()*specialties.length)];
             npc["Specialty"] = { 'value' : specialty, 'define' : false };
             
-            //pick a rank
-            rank = getRank();
+            //pick a rank between 1 and 5
+            rank = Math.floor(Math.random()*5) + 1;
             npc["Rank"] = { 'value' : rank, 'define' : false };
             
             //pick a personality
@@ -529,6 +524,8 @@
             $("#htvButton").click(function(){ hunter(); });
             $("#gttButton").click(function(){ genius(); }); 
             
+            
+            $(".container").show();
             
         });
         
