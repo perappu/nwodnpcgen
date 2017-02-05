@@ -9,6 +9,7 @@
     
     <!-- data -->
     <script type="text/javascript" src="changelingtraits.js"></script>
+    <script type="text/javascript" src="huntertraits.js"></script>
     <script type="text/javascript" src="personality.js"></script> 
     <script type="text/javascript" src="names.js"></script> 
     
@@ -74,6 +75,10 @@
                   <div id="hunter">
                     <h2>Hunter</h2>
                     
+                    <input type="checkbox" id="includeHTVHomebrew"/> Include Homebrew
+                    <br>
+                    <input type="checkbox" id="excludeQuestionableHTVContent"/> "Tamer" Results (No Ashwood Abbey, Hunt Club, etc)
+                    <br><br>
                     <button id="htvButton">Generate</button>
                   </div>
                   <div id="genius">
@@ -414,6 +419,8 @@
             
         }
         
+        
+        
         function hunter() {
         
             //clear previous results
@@ -423,6 +430,35 @@
             npc = getBasicStats("Hunter");
             
             //HUNTER SPECIFIC STUFF HERE
+            //get profession
+            profession = hunterProfessions[Math.floor(Math.random()*hunterProfessions.length)];
+            npc["Profession"] = { 'value' : profession, 'define' : false };
+            
+            //get compact/conspiracy
+            groupKeys = Object.keys(hunterGroups);
+            
+            includeHTVHomebrew = $("#includeHTVHomebrew").is(':checked');
+            excludeQuestionableHTVContent = $("#excludeQuestionableHTVContent").is(':checked');
+            
+            for(var key in hunterGroups) {
+            
+                //if questionable content is excluded, delete those records
+                if (hunterGroups[key]['Questionable'] == true && excludeQuestionableHTVContent == true) {
+                    groupKeys.splice(groupKeys.indexOf(key), 1);
+                }
+            
+                //if homebrew is excluded, delete those records also
+                if (hunterGroups[key]['Homebrew'] == true && includeHTVHomebrew == false) {
+                    groupKeys.splice(groupKeys.indexOf(key), 1);
+                }
+            
+            }
+            
+            console.log(groupKeys);
+            
+            groupName = groupKeys[Math.floor(Math.random()*groupKeys.length)];
+            group = hunterGroups[groupName];
+            npc[group["Tier"]] = { 'value' : groupName, 'define' : true, 'definition' : group["Definition"] };
             
             output = generateHTML(npc);
             
@@ -432,6 +468,16 @@
             plaintext = generatePlainText(npc);
                 
             $("textarea#resultTextarea").html(plaintext);
+        
+            for (var key in npc) {
+                
+                if (npc[key]['define'] == true) {
+                    
+                    makeTheStupidBox(key);
+                
+                }
+            
+            }
         
         }
         
