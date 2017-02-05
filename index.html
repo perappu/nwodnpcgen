@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>jQuery UI Tabs - Vertical Tabs functionality</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
     
     <!-- data -->
     <script type="text/javascript" src="changelingtraits.js"></script>
@@ -129,25 +129,26 @@
             return firstNames[Math.floor(Math.random()*firstNames.length)] + " " + lastNames[Math.floor(Math.random()*lastNames.length)] ;
         }
         
-        //return string of 3 random personality traits
-        function getPersonality() {
+        //return string of 3 random qualities out of an array
+        function getQualities(traitList) {
         
-            personality = [];
+            traits = [];
         
             for (i = 0; i < 3; i++) {
             
-                trait = personalityTraits[Math.floor(Math.random()*personalityTraits.length)];
+                trait = traitList[Math.floor(Math.random()*traitList.length)];
             
-                while(personality.includes(trait)) {
-                    trait = personalityTraits[Math.floor(Math.random()*personalityTraits.length)];
+                while(traits.includes(trait)) {
+                    trait = traitList[Math.floor(Math.random()*traitList.length)];
                 }
                 
-                personality.push(trait);
+                traits.push(trait);
             
             }
         
-            return personality[0] + ", " + personality[1] + ", " + personality[2];
+            return traits[0] + ", " + traits[1] + ", " + traits[2];
         }
+        
         
         //returns some json with values that apply to every splat
         function getBasicStats(template) {
@@ -171,8 +172,12 @@
             npc["Rank"] = { 'value' : rank, 'define' : false };
             
             //pick a personality
-            personality = getPersonality();
+            personality = getQualities(personalityTraits);
             npc["Personality"] = { 'value' : personality, 'define' : false };
+            
+            //pick an appearance
+            appearance = getQualities(appearanceTraits);
+            npc["Appearance"] = { 'value' : appearance, 'define' : false };
             
             return npc;
         
@@ -185,7 +190,19 @@
             for (var key in npc) {
                 
                 if(npc[key]['define'] == true) {
-                    //if the value has a definition set we need to make sure it'll make a popup thingy
+                    //if the value has a definition set we need to set up the modal
+                    
+                    //first add the value
+                    npchtml = npchtml.concat("<b>" + key + ":</b> " + npc[key]['value']);
+                    
+                    //next we need to add the definition button
+                    npchtml = npchtml.concat(" <a href='#' class='modal-toggle' id='" + key.toLowerCase() + "Define'>define</a></sub><br>");
+                    
+                    //and build the modal itself
+                    npchtml = npchtml.concat("<div id='" + key.toLowerCase() + "' class='modal'>");
+
+                    npchtml = npchtml.concat("<div class='modal-content'> <div class='modal-header'> <span class='close'>&times;</span> <h2>" + npc[key]['value'] + "</h2> </div>");
+                    npchtml = npchtml.concat("<div class='modal-body'> <p>" + npc[key]['definition'] + "</p> </div></div></div>");
                     
                 } else {
                 
@@ -196,6 +213,36 @@
             
             return npchtml;
         
+        }
+        
+        function makeTheStupidBox(key) {
+            //make the stupid modal box
+            //thanks w3 schools for making something simple because jqueryui actually kind of sucks
+            // Get the modal
+            var modal = document.getElementById(key.toLowerCase());
+
+            // Get the button that opens the modal
+            var btn = document.getElementById(key.toLowerCase() + 'Define');
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on the button, open the modal 
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         }
         
         function generatePlainText(npc) {
@@ -223,12 +270,10 @@
             //MORTAL SPECIFIC STUFF HERE
             
             output = generateHTML(npc);
-            
             $("#result").html(output);
             
             //copyable option
             plaintext = generatePlainText(npc);
-                
             $("textarea#resultTextarea").html(plaintext);
             
         }
@@ -308,15 +353,14 @@
             //clear previous results
             output = "";
             $("#result").html(output);
+                        
+            npc = getBasicStats("Changeling");
             
-            //pick a name
-            name = getName();
-            output = output + "<b>Name:</b> " + name + "<br>";
             
             //pick a seeming
             seemings = Object.keys(changelings);
             seeming = seemings[Math.floor(Math.random()*seemings.length)];
-            output = output + "<b>Seeming:</b> " + seeming + "<br>";
+            npc["Seeming"] = { 'value' : seeming, 'define' : false };
 
             //pick a kith
             kiths = Object.keys(changelings[seeming]);
@@ -329,10 +373,8 @@
                 }
             }
             
-            output = output + "<b>Kith:</b> " + kith + " <a href='#' id='kithDefine'>?</a> <br>";
-            
             kithDescription = changelings[seeming][kith];
-            output = output + "<div id='kithDescription' title='" + kith + "'>" + kithDescription + "</div>";
+            npc['Kith'] = { 'value' : kith, 'define' : true, 'definition' : kithDescription };
 
             //pick a court
             courts = [];
@@ -345,56 +387,30 @@
             if($("#includeTransitionalCourts").is(':checked'))
                 courts.push("Dawn","Dusk");
             if($("#includeCourtless").is(':checked'))
-                courts.push("Courtless");
-                
-            //in case someone decides not to pick anything    
-            //lowkey hate how ugly this is, javascript why    
+                courts.push("Courtless");  
             
             court = courts[Math.floor(Math.random()*courts.length)];
             if(typeof court === "undefined")
                 court = "";
-            output = output + "<b>Court:</b> " + court + "<br>";
+                
+            npc['Court'] = { 'value' : court, 'define' : false };
             
-            //pick a specialty
-            specialties = ["Mental","Physical","Social"];
-            specialty = specialties[Math.floor(Math.random()*specialties.length)];
-            output = output + "<b>Specialty:</b> " + specialty + "<br>";
-            
-            //pick a rank
-            rank = getRank();
-            output = output + "<b>Rank:</b> " + rank + "<br>";
-            
+            output = generateHTML(npc);
             $("#result").html(output);
             
             //copyable option
-            plaintext = "Name: " + name + "\n" +
-                "Seeming: " + seeming + "\n" +
-                "Kith: " + kith + "\n" +
-                "Court: " + court + "\n" +
-                "Specialty: " + specialty + "\n" +
-                "Rank: " + rank;
-                
+            plaintext = generatePlainText(npc);
             $("textarea#resultTextarea").html(plaintext);
             
-            $( "#kithDefine" ).click(function() {
-                $( "#kithDescription" ).dialog({
-                  modal: true,
-                  width: 'auto',
-                  create: function( event, ui ) {
-                    // Set maxWidth
-                    $(this).css("maxWidth", "400px");
-                    },
-                  show: {
-                    effect: "blind",
-                    duration: 1000
-                  },
-                  hide: {
-                    effect: "blind",
-                    duration: 1000
-                    }
-                });
-                $( "#kithDescription" ).dialog( "open" );
-            });
+            for (var key in npc) {
+                
+                if (npc[key]['define'] == true) {
+                    
+                    makeTheStupidBox(key);
+                
+                }
+            
+            }
             
         }
         

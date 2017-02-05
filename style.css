@@ -1,77 +1,139 @@
+
+body {
+    font-family: 'Verdana', sans-serif;
+    font-size: 1em;
+}
+
+a {
+    text-decoration: none;
+    color: #009ACD;
+}
+
+a:hover {
+    color: #00688B;
+}
+
+.container {
+    width: 100%;
+    margin: auto;
+}
+.col1 {
+    width: 50%;
+    float: left;
+}
+
+.col2 {
+    margin-left: 53%;
+    height: 200px;
     
-        body {
-            font-family: 'Verdana', sans-serif;
-            font-size: 1em;
-        }
-        
-        a {
-            text-decoration: none;
-            color: #009ACD;
-        }
-        
-        a:hover {
-            color: #00688B;
-        }
-    
-        .container {
-            width: 100%;
-            margin: auto;
-        }
-        .col1 {
-            width: 50%;
-            float: left;
-        }
-        
-        .col2 {
-            margin-left: 53%;
-            height: 200px;
-            
-        }
-        
-        .container:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        
-        .footer {
-            font-size: .7em;
-            margin-top: 1%;
-        }
-    
-        .ui-dialog { font-size: .9em; }
-        #kithDescription { display: none; }
-        
-        #result {
-            margin-bottom: 1em;
-        }
-        
-        #toggleTextareaButton {
-            display: block;
-            font-size: .9em;
-        }
-        
-        #resultTextarea {
-            display: none;
-            width: 100%;
-            height: 5em;
-        }
-        
-        .ui-tabs-vertical { width: 100%;}
-        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; min-width: 20%; max-width: 25%; }
-        .ui-tabs-vertical .ui-tabs-nav li { font-size: .9em; clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0;  }
-        .ui-tabs-vertical .ui-tabs-nav li a { display: block; border: 0px;}
-        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { margin-bottom: 2px; padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-        .ui-tabs-vertical .ui-tabs-panel { margin-left: 25%; padding: .5em; padding-top: 1%;}
-        
-        /* General Settings Styles */
-        #checkboxList {
-            margin-top: 1em;
-            margin-bottom: 1em;
-        }
-        
-        #checkboxList ul {
-          margin: 0;
-          list-style: none;
-        }
-        
+}
+
+.container:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.footer {
+    font-size: .7em;
+    margin-top: 1%;
+}
+
+#result {
+    margin-bottom: 1em;
+}
+
+#toggleTextareaButton {
+    display: block;
+    font-size: .9em;
+}
+
+#resultTextarea {
+    display: none;
+    width: 100%;
+    height: 5em;
+}
+
+.ui-tabs-vertical { width: 100%;}
+.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; min-width: 20%; max-width: 25%; }
+.ui-tabs-vertical .ui-tabs-nav li { font-size: .9em; clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0;  }
+.ui-tabs-vertical .ui-tabs-nav li a { display: block; border: 0px;}
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { margin-bottom: 2px; padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+.ui-tabs-vertical .ui-tabs-panel { margin-left: 25%; padding: .5em; padding-top: 1%;}
+
+/* General Settings Styles */
+#checkboxList {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#checkboxList ul {
+  margin: 0;
+  list-style: none;
+}
+
+/* The Modal (background) */
+    .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-toggle {
+    font-size: .6em;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    float: right;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #009ACD;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    border-bottom: 1px solid #000000;
+}
+
+.modal-body {padding: 2px 16px;}
